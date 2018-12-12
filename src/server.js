@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import bodyParser from "body-parser";
 
 import users from "./routes/api/users";
 import profile from "./routes/api/profile";
@@ -9,6 +10,12 @@ import posts from "./routes/api/posts";
 dotenv.config();
 
 const app = express();
+
+/**
+ * @description body-parser middleware
+ */
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 /**
  * @description MongoDB connection
