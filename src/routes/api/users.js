@@ -4,6 +4,9 @@ import passport from "passport";
 
 import User from "../../models/User";
 
+import validateRegistration from "../../validation/register";
+import validateLogin from "../../validation/login";
+
 const router = express.Router();
 
 /**
@@ -19,9 +22,15 @@ router.get("/test", (req, res) => res.json({ message: "Users Works" }));
  *  @access       Public
  */
 router.post("/register", (req, res) => {
+  const { errors, isValid } = validateRegistration(req.body);
+
+  // check validation
+  if (!isValid) return res.status(400).json(errors);
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      res.status(400).json({ errors: { email: "Email already exist" } });
+      errors.email = "Email already exist.";
+      res.status(400).json(errors);
     } else {
       const avatar = gravatar.url(req.body.email, {
         s: "200", // Size
@@ -48,12 +57,20 @@ router.post("/register", (req, res) => {
  *  @access       Public
  */
 router.post("/login", (req, res) => {
+  const { errors, isValid } = validateLogin(req.body);
+
+  // check validation
+  if (!isValid) return res.status(400).json(errors);
+
   const email = req.body.email;
   const password = req.body.password;
 
   // Find user by email
   User.findOne({ email }).then(user => {
-    if (!user) return res.status(404).json({ email: "User not found" });
+    if (!user) {
+      errors.email = "User not found!";
+      return res.status(404).json(errors);
+    }
 
     // Check password
     if (user.isValidPassword(password)) {
@@ -62,7 +79,8 @@ router.post("/login", (req, res) => {
       // Sign Token
       res.json({ success: true, token: `Bearer ${user.generateJWT(payload)}` });
     } else {
-      res.status(400).json({ password: "Incorrect Password" });
+      errors.password = "Incorrect password!";
+      res.status(400).json(errors);
     }
   });
 });
