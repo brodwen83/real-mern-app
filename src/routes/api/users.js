@@ -1,5 +1,7 @@
 import express from "express";
 import gravatar from "gravatar";
+import passport from "passport";
+
 import User from "../../models/User";
 
 const router = express.Router();
@@ -45,6 +47,41 @@ router.post("/register", (req, res) => {
  *  @description  Login User / Returning JWT Token
  *  @access       Public
  */
-router.post("/login", (req, res) => {});
+router.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  // Find user by email
+  User.findOne({ email }).then(user => {
+    if (!user) return res.status(404).json({ email: "User not found" });
+
+    // Check password
+    if (user.isValidPassword(password)) {
+      // User matched
+      const payload = { id: user.id, name: user.name, avatar: user.avatar };
+      // Sign Token
+      res.json({ success: true, token: `Bearer ${user.generateJWT(payload)}` });
+    } else {
+      res.status(400).json({ password: "Incorrect Password" });
+    }
+  });
+});
+
+/**
+ *  @route        GET api/users/current
+ *  @description  Returns current user
+ *  @access       Private
+ */
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email
+    });
+  }
+);
 
 export default router;

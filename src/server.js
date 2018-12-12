@@ -7,6 +7,8 @@ import users from "./routes/api/users";
 import profile from "./routes/api/profile";
 import posts from "./routes/api/posts";
 
+const passport = require("passport");
+
 dotenv.config();
 
 const app = express();
@@ -29,10 +31,14 @@ mongoose
   .catch(err => console.log("Can't connect to the database", err));
 /** end MongoDB connection. */
 
+// Passport Middleware
+app.use(passport.initialize());
+// Passport Config
+require("./config/passport")(passport);
+
 /**
  * @description Routes handlers
  */
-app.get("/", (req, res) => res.send("Hello!"));
 app.use("/api/users", users);
 app.use("/api/profile", profile);
 app.use("/api/posts", posts);
