@@ -1,10 +1,17 @@
 import React, { Component } from "react";
+import RegisterForm from "./forms/RegisterForm";
 
 class Register extends Component {
+  submit = data => {
+    console.log(data);
+  };
+
   render() {
     return (
-      <div>
-        <h1>Register</h1>
+      <div className="register">
+        <div className="container">
+          <RegisterForm submit={this.submit} />
+        </div>
       </div>
     );
   }
