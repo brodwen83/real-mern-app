@@ -1,13 +1,17 @@
 import React, { Component } from "react";
 import "./App.css";
 
+import NavBar from "./components/layouts/NavBar";
+import Landing from "./components/layouts/Landing";
+import Footer from "./components/layouts/Footer";
+
 class App extends Component {
   render() {
     return (
-      <div className="landing">
-        <div className="dark-overlay landing-inner text-light">
-          <h1>React App</h1>
-        </div>
+      <div>
+        <NavBar />
+        <Landing />
+        <Footer />
       </div>
     );
   }
