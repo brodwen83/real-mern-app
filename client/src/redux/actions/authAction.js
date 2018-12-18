@@ -4,13 +4,6 @@ import jwtDecode from "jwt-decode";
 
 import setAuthToken from "../../utils/setAuthToken";
 
-// const userSignedIn = userData => {
-//   return {
-//     type: USER_SIGNED_IN,
-//     payload: userData
-//   };
-// };
-
 /**
  * @param {*} errors
  * @description  returns an action with errors object as payload
@@ -55,4 +48,15 @@ export const loginUser = credentials => dispatch => {
       dispatch(setCurrentUser(decoded));
     })
     .catch(err => dispatch(getErrors(err.response.data)));
+};
+
+export const logoutUser = () => dispatch => {
+  // remove token fron localStorage
+  localStorage.removeItem("jwtToken");
+
+  // remove auth header
+  setAuthToken(false);
+
+  // set current user to an aempty object and is authenticated to false
+  dispatch(setCurrentUser({}));
 };

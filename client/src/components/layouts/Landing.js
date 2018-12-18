@@ -1,9 +1,38 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { logoutUser } from "../../redux/actions/authAction";
 
 class Landing extends Component {
+  onLogoutClick = e => {
+    e.preventDefault();
+    this.props.logoutUser();
+  };
+
   render() {
+    const { isAuthenticated } = this.props.auth;
+
+    const authLinks = (
+      <React.Fragment>
+        <button onClick={this.onLogoutClick} className="btn btn-lg btn-light">
+          Logout
+        </button>
+      </React.Fragment>
+    );
+
+    const guestLinks = (
+      <React.Fragment>
+        <Link to="/register" className="btn btn-lg btn-info mr-2">
+          Register
+        </Link>
+        <Link to="/login" className="btn btn-lg btn-light">
+          Login
+        </Link>
+      </React.Fragment>
+    );
+
     return (
       <div className="landing">
         <div className="dark-overlay landing-inner text-light">
@@ -16,12 +45,7 @@ class Landing extends Component {
                   from other developers
                 </p>
                 <hr />
-                <Link to="/register" className="btn btn-lg btn-info mr-2">
-                  Register
-                </Link>
-                <Link to="/login" className="btn btn-lg btn-light">
-                  Login
-                </Link>
+                {isAuthenticated ? authLinks : guestLinks}
               </div>
             </div>
           </div>
@@ -31,4 +55,16 @@ class Landing extends Component {
   }
 }
 
-export default Landing;
+Landing.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { logoutUser }
+)(Landing);

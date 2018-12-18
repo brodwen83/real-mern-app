@@ -20,6 +20,10 @@ class Register extends Component {
     if (errors) this.setState({ errors });
   };
 
+  componentDidMount = () => {
+    if (this.props.auth.isAuthenticated) this.props.history.push("/dashboard");
+  };
+
   render() {
     return (
       <div className="register">
