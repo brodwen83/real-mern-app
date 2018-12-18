@@ -1,28 +1,30 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import classnames from "classnames";
+
 class LogInForm extends Component {
   state = {
-    user: {
+    userData: {
       email: "",
       password: ""
-    },
-    errors: {}
+    }
   };
 
   onChange = e => {
     this.setState({
-      user: { ...this.state.user, [e.target.name]: e.target.value }
+      userData: { ...this.state.userData, [e.target.name]: e.target.value }
     });
   };
 
   onSubmit = e => {
     e.preventDefault();
-    this.props.submit(this.state.user);
+    this.props.submit(this.state.userData);
   };
 
   render() {
-    const { user } = this.state;
+    const { userData } = this.state;
+    const { errors } = this.props;
 
     return (
       <div className="row">
@@ -35,22 +37,32 @@ class LogInForm extends Component {
             <div className="form-group">
               <input
                 type="email"
-                className="form-control form-control-lg"
+                className={classnames("form-control form-control-lg", {
+                  "is-invalid": errors.email
+                })}
                 placeholder="Email Address"
                 name="email"
-                value={user.email}
+                value={userData.email}
                 onChange={this.onChange}
               />
+              {errors.email && (
+                <div className="invalid-feedback">{errors.email}</div>
+              )}
             </div>
             <div className="form-group">
               <input
                 type="password"
-                className="form-control form-control-lg"
+                className={classnames("form-control form-control-lg", {
+                  "is-invalid": errors.password
+                })}
                 placeholder="Password"
                 name="password"
-                value={user.password}
+                value={userData.password}
                 onChange={this.onChange}
               />
+              {errors.password && (
+                <div className="invalid-feedback">{errors.password}</div>
+              )}
             </div>
             <input type="submit" className="btn btn-info btn-block mt-4" />
           </form>
