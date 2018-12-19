@@ -16,6 +16,7 @@ import { setCurrentUser, logoutUser } from "./redux/actions/authAction";
 import Dashboard from "./components/Dashboard";
 import { clearCurrentProfile } from "./redux/actions/profileActions";
 import PrivateRoute from "./components/common/PrivateRoute";
+import CreateProfile from "./components/CreateProfile";
 
 if (localStorage.jwtToken) {
   // set auth token header auth
@@ -51,6 +52,13 @@ class App extends Component {
               <Route path="/login" exact component={Login} />
               <Switch>
                 <PrivateRoute path="/dashboard" exact component={Dashboard} />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  path="/create-profile"
+                  exact
+                  component={CreateProfile}
+                />
               </Switch>
             </div>
             <Footer />
