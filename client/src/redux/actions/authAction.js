@@ -8,7 +8,7 @@ import setAuthToken from "../../utils/setAuthToken";
  * @param {*} errors
  * @description  returns an action with errors object as payload
  */
-const getErrors = errors => ({
+export const getErrors = errors => ({
   type: GET_ERRORS,
   payload: errors
 });
