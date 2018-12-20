@@ -18,6 +18,8 @@ import { clearCurrentProfile } from "./redux/actions/profileActions";
 import PrivateRoute from "./components/common/PrivateRoute";
 import CreateProfile from "./components/CreateProfile";
 
+import EditProfile from "./components/EditProfile";
+
 if (localStorage.jwtToken) {
   // set auth token header auth
   setAuthToken(localStorage.jwtToken);
@@ -58,6 +60,13 @@ class App extends Component {
                   path="/create-profile"
                   exact
                   component={CreateProfile}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  path="/edit-profile"
+                  exact
+                  component={EditProfile}
                 />
               </Switch>
             </div>

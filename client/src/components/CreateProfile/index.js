@@ -15,7 +15,7 @@ class CreateProfile extends Component {
   };
 
   componentWillReceiveProps = ({ errors }) => {
-    this.setState({ errors });
+    if (errors) this.setState({ errors });
   };
 
   render() {
